@@ -59,36 +59,7 @@ const verifySignInBody = async (req, res, next) => {
 
 //  * Middleware to verify if the JWT token is valid
 
-// const verifyToken = (req, res, next) => {
-//   // Check if the token is present in the header
-//   const token = req.headers['authorization'];
 
-//   if (!token) {
-//     return res.status(403).send({
-//       message: 'No token found : Unauthorized',
-//     });
-//   }
-
-//   // If it's a valid token
-//   jwt.verify(token, secret, async (err, decoded) => {
-//     if (err) {
-//       return res.status(401).send({
-//         message: 'Unauthorized !',
-//       });
-//     }
-//     const user = await user_model.findOne({ userId: decoded.id });
-//     if (!user) {
-//       return res.status(400).send({
-//         message: "Unauthorized, this user for this token doesn't exist",
-//       });
-//     }
-//     // Set the user info in the req body
-//     req.user = user;
-//     next();
-//   });
-
-//   // Then move to the next step
-// };
 const verifyToken = (req, res, next) => {
   // Check if the Authorization header is present
   const authorizationHeader = req.headers['authorization'];
