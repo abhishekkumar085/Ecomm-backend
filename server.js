@@ -6,10 +6,11 @@ const app = express()
 import {PORT} from './configs/server.config.js'
 import { DB_NAME } from "./configs/db.config.js"
 import { DB_URL } from "./configs/db.config.js"
-import user_model from './models/user.model.js'
+import { User } from "./models/user.model.js"
 import bcrypt from "bcryptjs";
 import authRoutes from "./routes/auth.routes.js"
 import categoryRoutes from "./routes/category.routes.js"
+import productRoutes from "./routes/product.routes.js"
 
 app.use(express.json())
 
@@ -30,7 +31,7 @@ db.once("open", ()=>{
 
 async function init(){
     try{
-        let user  = await user_model.findOne({userId : "admin"})
+        let user  = await User.findOne({userId : "admin"})
 
        if(user){
           console.log("Admin is already present")
@@ -43,14 +44,14 @@ async function init(){
     
 
     try{
-      user = await user_model.create({
+      User = await User.create({
         name : "Abhi",
         userId : "admin",
         email : "abhi@gmail.com",
         userType : "ADMIN",
         password : bcrypt.hashSync("Welcome1",8)
       })
-      console.log("Admin created ", user)
+      console.log("Admin created ", User)
 
 
     }catch(err){
@@ -68,6 +69,7 @@ async function init(){
 
 authRoutes(app);
 categoryRoutes(app);
+productRoutes(app)
 /**
  * Start the server
  */

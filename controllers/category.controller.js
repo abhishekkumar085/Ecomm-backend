@@ -1,5 +1,4 @@
-import category_model from '../models/category.model.js';
-
+import { Category } from '../models/category.model.js';
 /**
  * Controller for creating the category
  * 
@@ -17,7 +16,7 @@ export const createNewCategory = async (req, res) => {
     name: req.body.name,
     description: req.body.description,
   };
-  const alreadyExitCategory = await category_model.findOne({
+  const alreadyExitCategory = await Category.findOne({
     name: cat_data.name,
   });
   if (alreadyExitCategory) {
@@ -28,7 +27,7 @@ export const createNewCategory = async (req, res) => {
 
   try {
     //Insert into mongodb
-    const category = await category_model.create(cat_data);
+    const category = await Category.create(cat_data);
     return res.status(201).send({
       data: category,
       message: 'Category created successfully',
@@ -47,7 +46,7 @@ export const createNewCategory = async (req, res) => {
 
 export const getAllCategory = async (req, res) => {
   try {
-    const getAllCategory = await category_model.find();
+    const getAllCategory = await Category.find();
     return res.status(201).send({
       message: 'All Category getting successfully!!',
       data: getAllCategory,
@@ -63,7 +62,7 @@ export const getAllCategory = async (req, res) => {
 
 export const getSpecificCategoryById = async (req, res) => {
   try {
-    const getCategoryById = await category_model.findById(req.params.id);
+    const getCategoryById = await Category.findById(req.params.id);
     return res.status(201).send({
       message: 'Category Getting Successfully!!',
       data: getCategoryById,
@@ -89,7 +88,7 @@ export const updateCategory = async (req, res) => {
   try {
     // Check if category with the new name already exists (if the name is being updated)
     if (req.body.name) {
-      const existingCategory = await category_model.findOne({
+      const existingCategory = await Category.findOne({
         name: req.body.name,
       });
       if (existingCategory && existingCategory._id.toString() !== id) {
@@ -100,7 +99,7 @@ export const updateCategory = async (req, res) => {
     }
 
     // Find the category by ID and update it
-    const category = await category_model.findByIdAndUpdate(id, req.body, {
+    const category = await Category.findByIdAndUpdate(id, req.body, {
       new: true, // Return the updated document
       runValidators: true, // Validate before updating
     });
@@ -129,13 +128,13 @@ export const updateCategory = async (req, res) => {
 export const deletCategory = async (req, res) => {
   try {
     const id = req.params.id;
-    const deleteCategory = await category_model.findByIdAndDelete(id);
+    const deleteCategory = await Category.findByIdAndDelete(id);
     if (!deleteCategory) {
       return res.status(404).send({
         message: 'Category not found',
       });
     }
-    return res.status(201).send({
+    return res.status(200).send({
       message: 'category deleted Successfully!!',
     });
   } catch (error) {

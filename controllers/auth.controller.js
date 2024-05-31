@@ -3,7 +3,7 @@
  */
 
 import bcrypt from 'bcryptjs';
-import user_model from '../models/user.model.js';
+import { User } from '../models/user.model.js';
 import jwt from 'jsonwebtoken';
 import { secret } from '../configs/auth.config.js';
 
@@ -26,7 +26,7 @@ const authController = {
     };
 
     try {
-      const user_created = await user_model.create(userObj);
+      const user_created = await User.create(userObj);
       /**
        * Return this user
        */
@@ -52,7 +52,7 @@ const authController = {
 
   signin: async (req, res) => {
     //Check if the user id is present in the system
-    const user = await user_model.findOne({ userId: req.body.userId });
+    const user = await User.findOne({ userId: req.body.userId });
 
     if (user == null) {
       return res.status(400).send({

@@ -1,4 +1,4 @@
-import user_model from '../models/user.model.js';
+import { User } from '../models/user.model.js';
 import jwt from 'jsonwebtoken';
 import { secret } from '../configs/auth.config.js';
 
@@ -26,7 +26,7 @@ const verifySignUpBody = async (req, res, next) => {
     }
 
     // Check if the user with the same userId is already present
-    const user = await user_model.findOne({ userId: req.body.userId });
+    const user = await User.findOne({ userId: req.body.userId });
 
     if (user) {
       return res.status(400).send({
@@ -59,7 +59,6 @@ const verifySignInBody = async (req, res, next) => {
 
 //  * Middleware to verify if the JWT token is valid
 
-
 const verifyToken = (req, res, next) => {
   // Check if the Authorization header is present
   const authorizationHeader = req.headers['authorization'];
@@ -86,7 +85,7 @@ const verifyToken = (req, res, next) => {
         message: 'Unauthorized: Invalid token',
       });
     }
-    const user = await user_model.findOne({ userId: decoded.id });
+    const user = await User.findOne({ userId: decoded.id });
     if (!user) {
       return res.status(400).send({
         message: "Unauthorized: User for this token doesn't exist",
@@ -97,7 +96,6 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
-
 
 //  * Middleware to check if the user is an ADMIN
 
